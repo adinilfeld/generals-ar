@@ -18,7 +18,8 @@ struct ARViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> ARView {
         
-        let arView = ARView(frame: .zero)
+        let arView = TapDetectorARView(frame: .zero)
+        arView.setupGestures()
 
         let tileWidth : Float = 0.1
         let tileMesh = MeshResource.generatePlane(width: tileWidth, height: tileWidth)
@@ -39,13 +40,14 @@ struct ARViewContainer: UIViewRepresentable {
                 if (i + j) % 2 == 0 {
                     color = blue
                 }
-                let tileEntity = ModelEntity(mesh: tileMesh, materials: [color])
+                let tileEntity = TappableEntity(model: ModelComponent(mesh: tileMesh, materials: [color]))
                 
                 // Create a number and fix it to the tile
-                // TODO: center this better
                 let textEntity = ModelEntity(mesh: .generateText(String(i), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.05), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [black])
                 tileEntity.addChild(textEntity)
                 
+                // Center the number within the tile
+                // TODO: center this better
                 textEntity.transform.translation.x -= tileWidth / 4;
                 textEntity.transform.translation.y -= tileWidth / 4;
                 
@@ -63,12 +65,12 @@ struct ARViewContainer: UIViewRepresentable {
         // Add the horizontal plane anchor to the scene
         arView.scene.anchors.append(anchor)
 
+        
         return arView
         
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {}
-    
 }
 
 #Preview {
