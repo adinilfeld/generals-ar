@@ -14,6 +14,8 @@
 		326CFC092BAF3BEC00968455 /* generals_arTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC082BAF3BEC00968455 /* generals_arTests.swift */; };
 		326CFC132BAF3BEC00968455 /* generals_arUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC122BAF3BEC00968455 /* generals_arUITests.swift */; };
 		326CFC152BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */; };
+		5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */; };
+		5AC30F722BAF7E8200530B68 /* TappableEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F712BAF7E8200530B68 /* TappableEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		326CFC0E2BAF3BEC00968455 /* generals.arUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = generals.arUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		326CFC122BAF3BEC00968455 /* generals_arUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generals_arUITests.swift; sourceTree = "<group>"; };
 		326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generals_arUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDetectorARView.swift; sourceTree = "<group>"; };
+		5AC30F712BAF7E8200530B68 /* TappableEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 				326CFBF92BAF3BE800968455 /* ContentView.swift */,
 				326CFBFB2BAF3BEB00968455 /* Assets.xcassets */,
 				326CFBFD2BAF3BEB00968455 /* Preview Content */,
+				5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */,
+				5AC30F712BAF7E8200530B68 /* TappableEntity.swift */,
 			);
 			path = generals.ar;
 			sourceTree = "<group>";
@@ -259,6 +265,8 @@
 			files = (
 				326CFBFA2BAF3BE800968455 /* ContentView.swift in Sources */,
 				326CFBF82BAF3BE800968455 /* AppDelegate.swift in Sources */,
+				5AC30F722BAF7E8200530B68 /* TappableEntity.swift in Sources */,
+				5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +430,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"generals.ar/Preview Content\"";
+				DEVELOPMENT_TEAM = HD5DXW33VS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -436,7 +445,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Jack-Nugent.generals-ar";
+				PRODUCT_BUNDLE_IDENTIFIER = "Adin-Ilfeld.generals-ar";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -452,6 +461,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"generals.ar/Preview Content\"";
+				DEVELOPMENT_TEAM = HD5DXW33VS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -466,7 +476,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Jack-Nugent.generals-ar";
+				PRODUCT_BUNDLE_IDENTIFIER = "Adin-Ilfeld.generals-ar";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
