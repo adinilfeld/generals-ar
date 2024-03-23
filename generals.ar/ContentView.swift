@@ -33,18 +33,18 @@ struct ARViewContainer: UIViewRepresentable {
         let m = 3
         for i in 0..<m {
             for j in 0..<n {
-                var m = red
+                var color = red
                 if (i + j) % 2 == 0 {
-                    m = blue
+                    color = blue
                 }
-                let model = ModelEntity(mesh: tileMesh, materials: [m])
+                let model = ModelEntity(mesh: tileMesh, materials: [color])
                 
                 // Apply rotation to lay the tile flat on the surface
                 model.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1, 0, 0])
 
                 // Offset tile to create grid
-                model.transform.translation.x = 0.1 * Float(i)
-                model.transform.translation.z = 0.1 * Float(j)
+                model.transform.translation.x = 0.1 * Float(m / 2 - i)
+                model.transform.translation.z = 0.1 * Float(n / 2 - j)
                 anchor.children.append(model)
             }
             
