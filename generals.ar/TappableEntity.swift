@@ -1,5 +1,5 @@
 //
-//  TileEntity.swift
+//  TappableEntity.swift
 //  generals.ar
 //
 //  Created by Adin Ilfeld on 3/23/24.

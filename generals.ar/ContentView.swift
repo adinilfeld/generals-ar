@@ -21,7 +21,7 @@ struct ARViewContainer: UIViewRepresentable {
         let arView = TapDetectorARView(frame: .zero)
         arView.setupGestures()
 
-        let tileWidth : Float = 0.1
+        let tileWidth : Float = 0.05
         let tileMesh = MeshResource.generatePlane(width: tileWidth, height: tileWidth)
         
         // Materials
@@ -32,8 +32,8 @@ struct ARViewContainer: UIViewRepresentable {
         // Create horizontal plane anchor for the content
         let anchor = AnchorEntity(.plane(.horizontal, classification: .any, minimumBounds: SIMD2<Float>(0.2, 0.2)))
         
-        let n = 4
-        let m = 3
+        let n = 7
+        let m = 7
         for i in 0..<m {
             for j in 0..<n {
                 var color = red
@@ -43,7 +43,7 @@ struct ARViewContainer: UIViewRepresentable {
                 let tileEntity = TappableEntity(model: ModelComponent(mesh: tileMesh, materials: [color]))
                 
                 // Create a number and fix it to the tile
-                let textEntity = ModelEntity(mesh: .generateText(String(i), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.05), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [black])
+                let textEntity = ModelEntity(mesh: .generateText(String(i), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.02), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [black])
                 tileEntity.addChild(textEntity)
                 
                 // Center the number within the tile
@@ -65,9 +65,7 @@ struct ARViewContainer: UIViewRepresentable {
         // Add the horizontal plane anchor to the scene
         arView.scene.anchors.append(anchor)
 
-        
         return arView
-        
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {}

@@ -11,14 +11,6 @@ import RealityKit
 import ARKit
 import Combine
 
-struct GameData {
-  var dimensions: SIMD2<Int> = [4,4]
-  var cardsFound: Int = 0
-  var totalCards: Int {
-    dimensions[0] * dimensions[1]
-  }
-}
-
 class TapDetectorARView: ARView, ARSessionDelegate {
     /// Add the tap gesture recogniser
     func setupGestures() {
@@ -26,7 +18,7 @@ class TapDetectorARView: ARView, ARSessionDelegate {
       self.addGestureRecognizer(tap)
     }
 
-    /// Handle taps on the screen, currently exclusively used for flipping cards
+    /// Tap logic goes here
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
         print("TAPPED")
         guard let touchInView = sender?.location(in: self) else {
@@ -47,10 +39,11 @@ class TapDetectorARView: ARView, ARSessionDelegate {
 // randomScale is an example that gives feedback
 extension Entity {
   func randomScale() {
-    var newTransform = self.transform
-    newTransform.scale = .init(
-      repeating: Float.random(in: 0.5...1.5)
-    )
-    self.transform = newTransform
+//    var newTransform = self.transform
+//    newTransform.scale = .init(
+//      repeating: Float.random(in: 0.5...1.5)
+//    )
+//    self.transform = newTransform
+      self.transform.scale *= 0.5
   }
 }
