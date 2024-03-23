@@ -20,17 +20,14 @@ struct ARViewContainer: UIViewRepresentable {
         
         let arView = ARView(frame: .zero)
 
-        // Create a cube model
-        let mesh = MeshResource.generateBox(size: 0.1, cornerRadius: 0.005)
-        let material = SimpleMaterial(color: .gray, roughness: 0.15, isMetallic: true)
+        let tileMesh = MeshResource.generatePlane(width: 0.1, height: 0.1)
+        
+        // Materials
         let red = SimpleMaterial(color: .red, isMetallic: false)
         let blue = SimpleMaterial(color: .blue, isMetallic: false)
-        let model = ModelEntity(mesh: mesh, materials: [material])
-//        model.transform.translation.y = 0.05
 
         // Create horizontal plane anchor for the content
         let anchor = AnchorEntity(.plane(.horizontal, classification: .any, minimumBounds: SIMD2<Float>(0.2, 0.2)))
-//        anchor.children.append(model)
         
         let n = 4
         let m = 3
@@ -40,19 +37,18 @@ struct ARViewContainer: UIViewRepresentable {
                 if (i + j) % 2 == 0 {
                     m = blue
                 }
-                let model = ModelEntity(mesh: mesh, materials: [m])
+                let model = ModelEntity(mesh: tileMesh, materials: [m])
+                
+                // Apply rotation to lay the tile flat on the surface
+                model.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1, 0, 0])
+
+                // Offset tile to create grid
                 model.transform.translation.x = 0.1 * Float(i)
                 model.transform.translation.z = 0.1 * Float(j)
                 anchor.children.append(model)
             }
             
         }
-        // Create a cube model
-//        let model2 = ModelEntity(mesh: mesh, materials: [material])
-//        model2.transform.translation.y = 0.15
-//        anchor.children.append(model2)
-
-        
 
         // Add the horizontal plane anchor to the scene
         arView.scene.anchors.append(anchor)
