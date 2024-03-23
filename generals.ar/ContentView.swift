@@ -20,11 +20,13 @@ struct ARViewContainer: UIViewRepresentable {
         
         let arView = ARView(frame: .zero)
 
-        let tileMesh = MeshResource.generatePlane(width: 0.1, height: 0.1)
+        let tileWidth : Float = 0.1
+        let tileMesh = MeshResource.generatePlane(width: tileWidth, height: tileWidth)
         
         // Materials
         let red = SimpleMaterial(color: .red, isMetallic: false)
         let blue = SimpleMaterial(color: .blue, isMetallic: false)
+        let black = SimpleMaterial(color: .black, isMetallic: false)
 
         // Create horizontal plane anchor for the content
         let anchor = AnchorEntity(.plane(.horizontal, classification: .any, minimumBounds: SIMD2<Float>(0.2, 0.2)))
@@ -37,17 +39,25 @@ struct ARViewContainer: UIViewRepresentable {
                 if (i + j) % 2 == 0 {
                     color = blue
                 }
-                let model = ModelEntity(mesh: tileMesh, materials: [color])
+                let tileEntity = ModelEntity(mesh: tileMesh, materials: [color])
+                
+                // Create a number and fix it to the tile
+                // TODO: center this better
+                let textEntity = ModelEntity(mesh: .generateText(String(i), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.05), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [black])
+                tileEntity.addChild(textEntity)
+                
+                textEntity.transform.translation.x -= tileWidth / 4;
+                textEntity.transform.translation.y -= tileWidth / 4;
                 
                 // Apply rotation to lay the tile flat on the surface
-                model.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1, 0, 0])
+                tileEntity.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1, 0, 0])
 
                 // Offset tile to create grid
-                model.transform.translation.x = 0.1 * Float(m / 2 - i)
-                model.transform.translation.z = 0.1 * Float(n / 2 - j)
-                anchor.children.append(model)
+                tileEntity.transform.translation.x = tileWidth * Float(m / 2 - i)
+                tileEntity.transform.translation.z = tileWidth * Float(n / 2 - j)
+                
+                anchor.children.append(tileEntity)
             }
-            
         }
 
         // Add the horizontal plane anchor to the scene
