@@ -45,6 +45,7 @@ struct ARViewContainer: UIViewRepresentable {
                 // Create a number and fix it to the tile
                 let textEntity = ModelEntity(mesh: .generateText(String(i), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.02), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [black])
                 tileEntity.addChild(textEntity)
+                tileEntity.removeChild(tileEntity.children[0])
                 
                 // Center the number within the tile
                 // TODO: center this better
