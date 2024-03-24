@@ -38,15 +38,3 @@ class TapDetectorARView: ARView, ARSessionDelegate {
         }
     }
 }
-
-//// randomScale is an example that gives feedback
-//extension Entity {
-//  func randomScale() {
-////    var newTransform = self.transform
-////    newTransform.scale = .init(
-////      repeating: Float.random(in: 0.5...1.5)
-////    )
-////    self.transform = newTransform
-//      self.transform.scale *= 0.5
-//  }
-//}
