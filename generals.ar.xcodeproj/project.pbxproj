@@ -19,6 +19,9 @@
 		32D218A72BAFD7FF00BCBD97 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 32D218A62BAFD7FF00BCBD97 /* AlamofireDynamic */; };
 		5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */; };
 		5AC30F742BAF8F7B00530B68 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F732BAF8F7B00530B68 /* Game.swift */; };
+		5AE20A342BB00039002D5199 /* mountainpeak.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 5AE20A332BB00039002D5199 /* mountainpeak.usdz */; };
+		5AE20A372BB001B9002D5199 /* tower.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 5AE20A362BB001B9002D5199 /* tower.usdz */; };
+		5AE20A392BB00895002D5199 /* smaller_mountain.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 5AE20A382BB00895002D5199 /* smaller_mountain.usdz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,9 @@
 		326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generals_arUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDetectorARView.swift; sourceTree = "<group>"; };
 		5AC30F732BAF8F7B00530B68 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		5AE20A332BB00039002D5199 /* mountainpeak.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = mountainpeak.usdz; sourceTree = "<group>"; };
+		5AE20A362BB001B9002D5199 /* tower.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = tower.usdz; sourceTree = "<group>"; };
+		5AE20A382BB00895002D5199 /* smaller_mountain.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = smaller_mountain.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +124,9 @@
 			isa = PBXGroup;
 			children = (
 				326CFBF72BAF3BE800968455 /* AppDelegate.swift */,
+				5AE20A382BB00895002D5199 /* smaller_mountain.usdz */,
+				5AE20A332BB00039002D5199 /* mountainpeak.usdz */,
+				5AE20A362BB001B9002D5199 /* tower.usdz */,
 				326CFBF92BAF3BE800968455 /* ContentView.swift */,
 				326CFBFB2BAF3BEB00968455 /* Assets.xcassets */,
 				326CFBFD2BAF3BEB00968455 /* Preview Content */,
@@ -268,6 +277,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AE20A342BB00039002D5199 /* mountainpeak.usdz in Resources */,
+				5AE20A372BB001B9002D5199 /* tower.usdz in Resources */,
+				5AE20A392BB00895002D5199 /* smaller_mountain.usdz in Resources */,
 				326CFBFF2BAF3BEB00968455 /* Preview Assets.xcassets in Resources */,
 				326CFBFC2BAF3BEB00968455 /* Assets.xcassets in Resources */,
 			);

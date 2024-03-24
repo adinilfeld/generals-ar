@@ -32,6 +32,11 @@ func getNumModel(num : Int) -> Entity {
     return e
 }
 
+func getTextWidth(text: Entity) -> Float {
+    let bounds = text.visualBounds(relativeTo: nil).extents
+    return bounds[0]
+}
+
 let tileWidth : Float = 0.05
 let gapSize : Float = 0.02 // The percent of the tile width that should be margin (not colored)
 
@@ -40,9 +45,6 @@ let blueMaterial = SimpleMaterial(color: .blue, isMetallic: false)
 let grayMaterial = SimpleMaterial(color: .gray, isMetallic: false)
 let whiteMaterial = SimpleMaterial(color: .white, isMetallic: false)
 let blackMaterial = SimpleMaterial(color: .black, isMetallic: false)
-let redTowerMaterial = SimpleMaterial(color: .red, isMetallic: true)
-let blueTowerMaterial = SimpleMaterial(color: .blue, isMetallic: true)
-let grayTowerMaterial = SimpleMaterial(color: .gray, isMetallic: true)
 
 
 class Tile: Entity, HasModel, HasCollision {
@@ -76,7 +78,7 @@ class Tile: Entity, HasModel, HasCollision {
     
     func setDirection(dir: Direction?) {
         print(dir)
-        // TODO
+        // TODO: implement
     }
     
     func setSelected(setSelected: Bool) {
@@ -93,6 +95,18 @@ class Tile: Entity, HasModel, HasCollision {
 class MountainTile: Tile {
     required init() {
         super.init()
+    
+        if let mountainEntity = try? Entity.loadModel(named: "mountainpeak") {
+            // smaller_mountain is better scaled, but is a lighter shade of gray
+//        if let mountainEntity = try? Entity.loadModel(named: "smaller_mountain") {
+            mountainEntity.scale *= 2.2
+            mountainEntity.scale.y *= 3
+//            mountainEntity.model?.materials = [grayMaterial] // Turns smaller mountain gray, but has some weird flickering
+            self.addChild(mountainEntity)
+        } else {
+            // Unable to load mountain model
+            print("ERROR: unable to load mountain model")
+        }
     }
 }
 
@@ -104,29 +118,38 @@ class TowerTile: Tile {
         super.init()
         
         self.addChild(getNumModel(num: self.troopCount))
+        
         self.setTroopCount(newCount: 0)
         self.setColor(color: self.color)
-    }
-    
-    override func setColor(color: Color) {
-        self.color = color
-        switch color {
-        case Color.red:
-            self.model?.materials = [redTowerMaterial]
-        case Color.blue:
-            self.model?.materials = [blueTowerMaterial]
-        case Color.gray:
-            self.model?.materials = [grayTowerMaterial]
+        
+        if let towerEntity = try? Entity.load(named: "tower") {
+            towerEntity.scale *= 0.12
+            self.addChild(towerEntity)
+        } else {
+            print("ERROR: unable to load tower model")
         }
     }
+    
+    // TODO: possibly add this back if we want to change the color of the tower model
+//    override func setColor(color: Color) {
+//        self.color = color
+//        switch color {
+//        case Color.red:
+//            self.model?.materials = [redTowerMaterial]
+//        case Color.blue:
+//            self.model?.materials = [blueTowerMaterial]
+//        case Color.gray:
+//            self.model?.materials = [grayTowerMaterial]
+//        }
+//    }
 
     func setTroopCount(newCount : Int) {
         self.troopCount = newCount
         self.removeChild(self.children[0])
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
-        textEntity.transform.translation.x -= tileWidth / 4;
-        textEntity.transform.translation.z += tileWidth / 4;
+        textEntity.transform.translation.x -= getTextWidth(text: textEntity) / 2;
+        textEntity.transform.translation.z += tileWidth / 2;
     }
 }
 
@@ -146,7 +169,7 @@ class OpenTile: Tile {
         self.removeChild(self.children[0])
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
-        textEntity.transform.translation.x -= tileWidth / 4;
+        textEntity.transform.translation.x -= getTextWidth(text: textEntity) / 2;
         textEntity.transform.translation.z += tileWidth / 4;
     }
 }
@@ -288,10 +311,12 @@ class Board : Entity {
         for i in 0..<m {
             var row: [Tile] = []
             for j in 0..<n {
-                // TODO: remove these towers (doing it to test the visuals)
+                // TODO: remove these towers/mountains (doing it to test the visuals)
                 var tile : Tile = OpenTile()
                 if i == j {
                     tile = TowerTile()
+                } else if i == m - j {
+                    tile = MountainTile()
                 }
                 tile.i = i
                 tile.j = j
@@ -378,13 +403,14 @@ class Board : Entity {
         // Check if a fromTile had already been selected;
         // if so, we make a new move and send it to the backend.
         if let (x,y) = self.fromTile {
-            // Edge case: user taps same square twice.
-            // We ignore the second tap.
+            self.board[x][y].setSelected(setSelected: false)
+            self.fromTile = nil
+            
+            // If user taps same square twice, deselect it but do nothing else
             if x == i && y == j {
                 return
             }
-            self.board[x][y].setSelected(setSelected: false)
-            self.fromTile = nil
+            
             let url: URL = URL(string: serverURL + "/move")!
             var request1: URLRequest = URLRequest(url: url)
             
