@@ -136,12 +136,8 @@ class OpenTile: Tile {
 
 let serverURL = "http://127.0.0.1:8000"
 
-func shortestPath(s: (Int, Int), t: (Int, Int)) -> [[Int]] {
-    return [[s.0,s.1,t.0,t.1]]
-}
-
 class Board : Entity {
-    var board : [[Tile]] = [[]]
+    var board : [[Tile]] = []
     var fromTile : (Int, Int)?  = nil
     
     required init() {
@@ -159,7 +155,12 @@ class Board : Entity {
     
         print("HERE")
         
-        self.defaultBoard()
+        // TODO: remove this and uncomment below
+        if board.count == 0 {
+            self.defaultBoard()
+        } else {
+            print(board.count)
+        }
 
 //        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
 //
@@ -168,7 +169,7 @@ class Board : Entity {
 //                    print("ASynchronous\(jsonResult)")
 //                    print(jsonResult["a"])
 //                    print(jsonResult["b"])
-//                    // TODO
+//                    // TODO: read input and adjust
 //                }
 //            } catch let error as NSError {
 //                print(error.localizedDescription)
@@ -180,6 +181,7 @@ class Board : Entity {
         let n = 7
         let m = 7
         for i in 0..<m {
+            var row: [Tile] = []
             for j in 0..<n {
                 var color = Color.red
                 if (i + j) % 2 == 0 {
@@ -190,31 +192,80 @@ class Board : Entity {
                 tile.j = j
                 tile.setColor(color: color)
                 
-                // TODO: center this better
-                
                 
                 // Offset tile to create grid
                 tile.transform.translation.x = tileWidth * Float(m / 2 - i)
                 tile.transform.translation.z = tileWidth * Float(n / 2 - j)
                 
                 self.addChild(tile)
+                row.append(tile)
             }
+            self.board.append(row)
         }
 
     }
     
+    func shortestPath(s: (Int, Int), t: (Int,Int)) -> [[Int]] {
+        let I = board.count
+        let J = board[0].count
+        func nbh(i: Int, j: Int) -> [(Int, Int)] {
+            var out: [(Int, Int)] = []
+            if i > 0 {
+                out.append((i-1,j))
+            }
+            if i < I {
+                out.append((i+1,j))
+            }
+            if j > 0 {
+                out.append((i,j-1))
+            }
+            if j < J {
+                out.append((i,j+1))
+            }
+            return out
+        }
+        
+        var visited: [[Bool]] = []
+        var last: [[(Int,Int)?]] = []
+        for i in 0..<I {
+            var row: [Bool] = []
+            var row_last: [(Int,Int)?] = []
+            for j in 0..<J {
+                row.append(false)
+                row_last.append(nil)
+            }
+            visited.append(row)
+            last.append(row_last)
+        }
+        
+        var q: [(Int, Int)] = [s]
+        while q.count > 0 {
+            let curr = q.popLast()!
+            if visited[curr.0][curr.1] { continue }
+            
+            // finish BFS
+            for p in nbh(curr.0, curr.1) {
+            }
+            }
+            
+            
+            
+        }
+        
+    }
+    
     func updateMove(i: Int, j: Int) {
         if let (x,y) = self.fromTile {
+            self.fromTile = nil
             let url: URL = URL(string: serverURL + "/move")!
-            // TODO: edit body of request
             var request1: URLRequest = URLRequest(url: url)
             
             
             let encoder = JSONEncoder()
-            request1.httpBody = try? encoder.encode(shortestPath(s: (i,j), t: (x,y)))
+            request1.httpBody = try? encoder.encode(self.shortestPath(s: (i,j), t: (x,y)))
             
             
-            print(shortestPath(s: (i,j), t: (x,y)))
+            print(self.shortestPath(s: (i,j), t: (x,y)))
             print(request1.httpBody)
             
 
@@ -231,6 +282,7 @@ class Board : Entity {
                     print(error.localizedDescription)
                 }
             })
+            
         } else {
             self.fromTile = (i,j)
             return
