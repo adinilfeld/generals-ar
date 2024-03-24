@@ -8,17 +8,6 @@
 import SwiftUI
 import RealityKit
 
-class Button3D : Entity, HasModel, HasCollision {
-    required init() {
-        super.init()
-        
-        self.model = ModelComponent(mesh: .generatePlane(width: (1-gapSize) * tileWidth, depth: (1-gapSize) * tileWidth), materials: [redMaterial])
-        self.numModel = getNumModel(num: <#T##Int#>)
-        self.generateCollisionShapes(recursive: true)
-    }
-
-}
-
 struct ContentView : View {
     var board: Board
     
