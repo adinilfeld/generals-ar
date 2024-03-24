@@ -442,9 +442,11 @@ class Board : Entity {
                             print("ADDED CHILD")
                         } else {
                             if let t = self.board[i][j] as? TowerTile {
-                                t.setColor(color: color)
-                                t.setTroopCount(newCount: square.2)
-                                print("SET TROOP COUNT TOWER", t.troopCount)
+                                if color != t.color || square.2 != t.troopCount {
+                                    t.setColor(color: color)
+                                    t.setTroopCount(newCount: square.2)
+                                    print("SET TROOP COUNT TOWER", t.troopCount)
+                                }
                             } else {
                                 print("FAILED TO GET TOWER TILE")
                             }
@@ -466,9 +468,12 @@ class Board : Entity {
                             print("ADDED CHILD")
                         } else {
                             if let t = self.board[i][j] as? OpenTile {
-                                t.setColor(color: color)
-                                t.setTroopCount(newCount: square.2)
-//                                print("SET TROOP COUNT")
+                                if color != t.color || square.2 != t.troopCount {
+                                    
+                                    t.setColor(color: color)
+                                    t.setTroopCount(newCount: square.2)
+                                    //                                print("SET TROOP COUNT")
+                                }
                             }
 //                            var t : TowerTile = self.board[i][j]
                         }
@@ -536,16 +541,32 @@ class Board : Entity {
         func nbh(i: Int, j: Int) -> [(Int, Int)] {
             var out: [(Int, Int)] = []
             if i > 0 {
-                out.append((i-1,j))
+                if let x = self.board[i][j] as? MountainTile {
+                    
+                } else {
+                    out.append((i-1,j))
+                }
             }
             if i < I-1 {
-                out.append((i+1,j))
+                if let x = self.board[i][j] as? MountainTile {
+                    
+                } else {
+                    out.append((i+1,j))
+                }
             }
             if j > 0 {
-                out.append((i,j-1))
+                if let x = self.board[i][j] as? MountainTile {
+                    
+                } else {
+                    out.append((i,j-1))
+                }
             }
             if j < J-1 {
-                out.append((i,j+1))
+                if let x = self.board[i][j] as? MountainTile {
+                    
+                } else {
+                    out.append((i,j+1))
+                }
             }
             return out
         }
