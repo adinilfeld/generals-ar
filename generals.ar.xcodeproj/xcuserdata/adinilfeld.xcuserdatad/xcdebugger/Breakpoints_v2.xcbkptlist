@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "57F389AE-2897-4D01-B0B2-F2176177FD52"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6816AE2C-F45C-4935-AA85-6DE2D8BFBD5D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "generals.ar/Game.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
+            landmarkName = "defaultBoard()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6816AE2C-F45C-4935-AA85-6DE2D8BFBD5D - bef79cdc2544ad13"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nbh(i: Swift.Int, j: Swift.Int) -&gt; Swift.Array&lt;(Swift.Int, Swift.Int)&gt;"
+                  moduleName = "generals.ar"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/adinilfeld/Desktop/generals-ar/generals.ar/Game.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299">
+               </Location>
+               <Location
+                  uuid = "6816AE2C-F45C-4935-AA85-6DE2D8BFBD5D - 77f01af5f17bde18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "generals_ar.Board.shortestPath(s: (Swift.Int, Swift.Int), t: (Swift.Int, Swift.Int)) -&gt; Swift.Array&lt;Swift.Array&lt;Swift.Int&gt;&gt;"
+                  moduleName = "generals.ar"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/adinilfeld/Desktop/generals-ar/generals.ar/Game.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
