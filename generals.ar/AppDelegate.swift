@@ -30,6 +30,18 @@ class CustomUIHostingController<Content> : UIHostingController<Content> where Co
     
     func update() {
         self.board.updateBoard()
+        
+        // TODO: erase
+        if self.board.board.count > 0 {
+            if let t = self.board.board[0][0] as? OpenTile {
+                print("INCREMENT TROOPS")
+                t.setTroopCount(newCount: t.troopCount + 1)
+            } else {
+                print("ERROR")
+            }
+        } else {
+            print("NO BOARD")
+        }
     }
 }
 

@@ -216,7 +216,9 @@ struct ResponseData : Decodable {
     var board: [[String]]
 }
 
-let serverURL = "http://10.150.83.102:8000"
+//let serverURL = "http://10.150.83.102:8000"
+//let serverURL = "http://67.176.159.214:8000"
+let serverURL = "http://10.150.17.140:8000"
 
 class Board : Entity {
     var board : [[Tile]] = []
@@ -227,7 +229,7 @@ class Board : Entity {
     required init() {
         self.playerid = Int.random(in: 1..<2_000_000_000)
         super.init()
-        self.defaultBoard()
+//        self.defaultBoard()
         self.updateBoard()
      
     }
@@ -262,22 +264,73 @@ class Board : Entity {
         }
 //        self.updateBoardFromJson_(board: DefaultBoard)
 
-//        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
-//            if data != nil {
-//                do {
-//                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-////                        print("ASynchronous\(jsonResult)")
-//                        // TODO: read input and adjust
-//                        print("GOT RESULT")
+        
+//        NSURLConnection.sendSynchronousRequest(request1, returning: <#T##AutoreleasingUnsafeMutablePointer<URLResponse?>?#>)
+        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
+            if data != nil {
+                do {
+                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
+//                        print("ASynchronous\(jsonResult)")
+                        // TODO: read input and adjust
+                        print("GOT RESULT")
+                        
 //                        self.updateBoardFromJson(data: jsonResult)
-//                    }
-//                } catch let error as NSError {
-//                    print(error.localizedDescription)
-//                }
-//            } else {
-//                print("NO DATA RECEIVED")
-//            }
-//        })
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            print(jsonResult)
+                            let json = self.Deserialize(data: jsonResult)
+                            self.updateBoardFromJson_(board: json)
+
+//                            var material = SimpleMaterial()
+//                            material.baseColor = try! .texture(.load(named: "tex.png"))
+//                            
+//                            var comp: ModelComponent = model.components[ModelComponent.self]!
+//                            comp.materials = [material]
+//                            model.components.set(comp)
+                        }
+//                        let json = self.Deserialize(data: jsonResult)
+//                        self.updateBoardFromJson_(board: json)
+                    }
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else {
+                print("NO DATA RECEIVED")
+            }
+        })
+    }
+    
+    func Deserialize(data: NSDictionary) -> [[(Int, String, Int)]]{
+        var board_out: [[(Int, String, Int)]] = []
+        let board_data = data["board"]!
+        if let board_data = board_data as? [AnyObject] {
+//            var i = 0;
+//            var j = 0;
+            var c = 0
+            var curr_row: [(Int, String, Int)] = []
+            var curr_tuple = (0, "", 0)
+            for item in board_data {
+                let tuple_i = c % 3
+//                j = (c / 3) % 10
+//                i = (c / 3) / 10
+                
+                if tuple_i == 0 {curr_tuple.0 = (item as? Int)!}
+                if tuple_i == 1 {curr_tuple.1 = (item as? String)!}
+                if tuple_i == 2 {
+                    curr_tuple.2 = (item as? Int)!
+                    if curr_row.count == 10 {
+                        board_out.append(curr_row)
+                        curr_row = []
+                    }
+                    curr_row.append(curr_tuple)
+                }
+                c += 1
+            }
+            
+            board_out.append(curr_row)
+            
+            assert(c == 300)
+        }
+        return board_out
     }
     
     // TODO: have to hook this function up to updateBoardFromJson (to use the move list returned by server)
@@ -336,6 +389,8 @@ class Board : Entity {
         print("READING BOARD")
 //        let board = data["board"]!
         let init_board: Bool = self.board.count == 0
+        let m = board.count
+        let n = m
         print("board rows", self.board.count, "init board", init_board)
 //        print(type(of:board))
 //        if let board = board as? [[(Any, String, Int)]] {
@@ -357,28 +412,37 @@ class Board : Entity {
 //                    }
                     if square.1 == "⛰" {
                         if init_board {
-//                            let t = MountainTile()
-//                            t.i = i
-//                            t.j = j
-//                            t.setColor(color: color)
-//                            tile_row.append(t)
-//                            self.addChild(t)
-//                            print("ADDED CHILD")
+                            let t = MountainTile()
+                            t.i = i
+                            t.j = j
+                            t.setColor(color: color)
+                            tile_row.append(t)
+                            self.addChild(t)
+                            // Offset tile to create grid
+                            t.transform.translation.x = tileWidth * Float(m / 2 - i)
+                            t.transform.translation.z = tileWidth * Float(n / 2 - j)
+
+                            print("ADDED CHILD")
                         }
-                    } else if square.1 == "⌂" || square.1 == "♔" {
+                    } else if (square.1 == "⌂") || (square.1 == "♔") || (square.1 == "♛") {
                         if init_board {
-//                            let t = TowerTile()
-//                            t.i = i
-//                            t.j = j
-//                            t.setColor(color: color)
-//                            t.setTroopCount(newCount: square.2)
-//                            tile_row.append(t)
-//                            self.addChild(t)
-//                            print("ADDED CHILD")
+                            let t = TowerTile()
+                            t.i = i
+                            t.j = j
+                            t.setColor(color: color)
+                            t.setTroopCount(newCount: square.2)
+                            tile_row.append(t)
+                            self.addChild(t)
+                            // Offset tile to create grid
+                            t.transform.translation.x = tileWidth * Float(m / 2 - i)
+                            t.transform.translation.z = tileWidth * Float(n / 2 - j)
+
+                            print("ADDED CHILD")
                         } else {
                             if let t = self.board[i][j] as? TowerTile {
                                 t.setColor(color: color)
                                 t.setTroopCount(newCount: square.2)
+                                print("SET TROOP COUNT")
                             }
                         }
                     } else if square.1 == "-" {
@@ -391,22 +455,31 @@ class Board : Entity {
                             t.setTroopCount(newCount: square.2)
                             tile_row.append(t)
                             self.addChild(t)
+                            // Offset tile to create grid
+                            t.transform.translation.x = tileWidth * Float(m / 2 - i)
+                            t.transform.translation.z = tileWidth * Float(n / 2 - j)
+
                             print("ADDED CHILD")
                         } else {
                             if let t = self.board[i][j] as? OpenTile {
                                 t.setColor(color: color)
                                 t.setTroopCount(newCount: square.2)
+                                print("SET TROOP COUNT")
                             }
 //                            var t : TowerTile = self.board[i][j]
                         }
+                    } else {
+                        assert(false)
                     }
                     j += 1
                 }
                 if init_board{
+                    assert(tile_row.count == 10)
                     self.board.append(tile_row)
                 }
                 i += 1
             }
+        assert(self.board.count == 10)
     }
     
     func defaultBoard() {
@@ -578,7 +651,6 @@ class Board : Entity {
         // TODO: send a restart request to the server
     }
 }
-
 
 //let DefaultBoard: [[(Int, String, Int)]] = [
 //    "board": [
