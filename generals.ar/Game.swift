@@ -63,8 +63,6 @@ class Tile: Entity, HasModel, HasCollision {
         self.model = ModelComponent(mesh: .generatePlane(width: (1-gapSize) * tileWidth, depth: (1-gapSize) * tileWidth), materials: [grayMaterial])
         self.generateCollisionShapes(recursive: true)
         self.setColor(color: self.color)
-        
-        setDirection(dir: Direction.down)
     }
     
     func setColor(color: Color) {
@@ -257,11 +255,11 @@ class Board : Entity {
         print("HERE")
         
         // TODO: remove this and uncomment below
-        if board.count == 0 {
-            self.defaultBoard()
-        } else {
-            print(board.count)
-        }
+//        if board.count == 0 {
+//            self.defaultBoard()
+//        } else {
+//            print(board.count)
+//        }
 //        self.updateBoardFromJson_(board: DefaultBoard)
 
         
@@ -276,7 +274,7 @@ class Board : Entity {
                         
 //                        self.updateBoardFromJson(data: jsonResult)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                            print(jsonResult)
+//                            print(jsonResult)
                             let json = self.Deserialize(data: jsonResult)
                             self.updateBoardFromJson_(board: json)
 
@@ -385,6 +383,7 @@ class Board : Entity {
         let m = board.count
         let n = m
         print("board rows", self.board.count, "init board", init_board)
+        print("HEREHERE i:0,j:1", board[0][1])
 //        print(type(of:board))
 //        if let board = board as? [[(Any, String, Int)]] {
             var i = 0
@@ -435,7 +434,9 @@ class Board : Entity {
                             if let t = self.board[i][j] as? TowerTile {
                                 t.setColor(color: color)
                                 t.setTroopCount(newCount: square.2)
-                                print("SET TROOP COUNT")
+                                print("SET TROOP COUNT TOWER", t.troopCount)
+                            } else {
+                                print("FAILED TO GET TOWER TILE")
                             }
                         }
                     } else if square.1 == "-" {
@@ -457,7 +458,7 @@ class Board : Entity {
                             if let t = self.board[i][j] as? OpenTile {
                                 t.setColor(color: color)
                                 t.setTroopCount(newCount: square.2)
-                                print("SET TROOP COUNT")
+//                                print("SET TROOP COUNT")
                             }
 //                            var t : TowerTile = self.board[i][j]
                         }

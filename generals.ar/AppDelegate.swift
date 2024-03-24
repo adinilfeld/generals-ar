@@ -25,23 +25,23 @@ class CustomUIHostingController<Content> : UIHostingController<Content> where Co
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: {_ in self.update()})
+        self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: {_ in self.update()})
     }
     
     func update() {
-        self.board.updateBoard()
+         self.board.updateBoard()
         
         // TODO: erase
-        if self.board.board.count > 0 {
-            if let t = self.board.board[0][0] as? OpenTile {
-                print("INCREMENT TROOPS")
-                t.setTroopCount(newCount: t.troopCount + 1)
-            } else {
-                print("ERROR")
-            }
-        } else {
-            print("NO BOARD")
-        }
+//        if self.board.board.count > 0 {
+//            if let t = self.board.board[2][1] as? OpenTile {
+//                print("INCREMENT TROOPS")
+//                t.setTroopCount(newCount: t.troopCount + 1)
+//            } else {
+//                print("ERROR")
+//            }
+//        } else {
+//            print("NO BOARD")
+//        }
     }
 }
 
