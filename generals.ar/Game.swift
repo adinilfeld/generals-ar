@@ -10,6 +10,8 @@ import SwiftUI
 import RealityKit
 import ARKit
 import Foundation
+import DequeModule
+//import Alamofire
 
 enum Color {
     case red
@@ -134,24 +136,40 @@ class OpenTile: Tile {
     }
 }
 
-let serverURL = "http://127.0.0.1:8000"
+let serverURL = "http://10.150.83.102:8000"
 
 class Board : Entity {
     var board : [[Tile]] = []
     var fromTile : (Int, Int)?  = nil
+    var playerid: Int
+    var player: Color = Color.red
     
     required init() {
+        self.playerid = Int.random(in: 1..<2_000_000_000)
         super.init()
         self.updateBoard()
+     
     }
     
     func updateBoard() {
-        let url: URL = URL(string: serverURL + "/board")!
+        print("UPDATING BOARD")
+        var url = URLComponents(string: serverURL + "/board")!
+        
         print(url)
-        var request1: URLRequest = URLRequest(url: url)
+        
+        url.queryItems = [
+            URLQueryItem(name: "playerid", value: String(self.playerid))
+        ]
+        
+        var request1: URLRequest = URLRequest(url: url.url!)
+        print(url.url!)
 
         request1.httpMethod = "GET"
         let queue:OperationQueue = OperationQueue()
+
+//        let encoder = JSONEncoder()
+//        request1.httpBody = try? encoder.encode(["playerid": self.playerid])
+//        request1.httpBody = try? JSONSerialization.data(withJSONObject: ["playerid": self.playerid])
     
         print("HERE")
         
@@ -163,18 +181,90 @@ class Board : Entity {
         }
 
 //        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
-//
-//            do {
-//                if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-//                    print("ASynchronous\(jsonResult)")
-//                    print(jsonResult["a"])
-//                    print(jsonResult["b"])
-//                    // TODO: read input and adjust
+//            if data != nil {
+//                do {
+//                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
+////                        print("ASynchronous\(jsonResult)")
+//                        // TODO: read input and adjust
+//                        print("GOT RESULT")
+//                        self.updateBoardFromJson(data: jsonResult)
+//                    }
+//                } catch let error as NSError {
+//                    print(error.localizedDescription)
 //                }
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
+//            } else {
+//                print("NO DATA RECEIVED")
 //            }
 //        })
+    }
+    
+    func updateBoardFromJson(data: NSDictionary) {
+        print("READING BOARD")
+        let board = data["board"]!
+        let init_board: Bool = self.board.count == 0
+        if let board = board as? [[(Int, String, Int)]] {
+            var i = 0
+            for row in board {
+                var tile_row: [Tile] = []
+                var j = 0
+                for square in row {
+                    var color = Color.gray
+                    if square.0 == 1 {
+                        color = Color.blue
+                    } else if square.0 == 2 {
+                        color = Color.red
+                    }
+                    if square.1 == "⛰" {
+                        if init_board {
+                            var t = MountainTile()
+                            t.i = i
+                            t.j = j
+                            t.setColor(color: color)
+                            tile_row.append(t)
+                            self.addChild(t)
+                            print("ADDED CHILD")
+                        }
+                    } else if square.1 == "⌂" {
+                        if init_board {
+                            var t = TowerTile()
+                            t.i = i
+                            t.j = j
+                            t.setColor(color: color)
+                            t.setTroopCount(newCount: square.2)
+                            tile_row.append(t)
+                            self.addChild(t)
+                            print("ADDED CHILD")
+                        } else {
+                            if let t = self.board[i][j] as? TowerTile {
+                                t.setColor(color: color)
+                                t.setTroopCount(newCount: square.2)
+                            }
+                        }
+                    } else if square.1 == "-" {
+                        if init_board {
+                            var t = TowerTile()
+                            t.i = i
+                            t.j = j
+                            t.setColor(color: color)
+                            t.setTroopCount(newCount: square.2)
+                            tile_row.append(t)
+                            self.addChild(t)
+                            print("ADDED CHILD")
+                        } else {
+                            if let t = self.board[i][j] as? OpenTile {
+                                t.setColor(color: color)
+                                t.setTroopCount(newCount: square.2)
+                            }
+//                            var t : TowerTile = self.board[i][j]
+                        }
+                    }
+                }
+                self.board.append(tile_row)
+            }
+        } else {
+            print("ERROR")
+//            print(board)
+        }
     }
     
     func defaultBoard() {
@@ -213,13 +303,13 @@ class Board : Entity {
             if i > 0 {
                 out.append((i-1,j))
             }
-            if i < I {
+            if i < I-1 {
                 out.append((i+1,j))
             }
             if j > 0 {
                 out.append((i,j-1))
             }
-            if j < J {
+            if j < J-1 {
                 out.append((i,j+1))
             }
             return out
@@ -227,10 +317,10 @@ class Board : Entity {
         
         var visited: [[Bool]] = []
         var last: [[(Int,Int)?]] = []
-        for i in 0..<I {
+        for _ in 0..<I {
             var row: [Bool] = []
             var row_last: [(Int,Int)?] = []
-            for j in 0..<J {
+            for _ in 0..<J {
                 row.append(false)
                 row_last.append(nil)
             }
@@ -238,20 +328,38 @@ class Board : Entity {
             last.append(row_last)
         }
         
-        var q: [(Int, Int)] = [s]
+        visited[s.0][s.1] = true
+        
+        var q: Deque = [s]
         while q.count > 0 {
-            let curr = q.popLast()!
-            if visited[curr.0][curr.1] { continue }
+            let curr = q.popFirst()!
             
-            // finish BFS
-            for p in nbh(curr.0, curr.1) {
+            if curr == t {
+                // TODO get path
+                var path: [[Int]] = []
+                var p2 = curr
+                var p1 = last[curr.0][curr.1]!
+                while p1 != s {
+                    path.append([p1.0,p1.1,p2.0,p2.1])
+                    
+                    p2 = p1
+                    p1 = last[p1.0][p1.1]!
+                }
+                path.append([p1.0,p1.1,p2.0,p2.1])
+
+                return path
             }
+            
+            for p in nbh(i:curr.0, j:curr.1) {
+                if !visited[p.0][p.1] {
+                    q.append(p)
+                    visited[p.0][p.1] = true
+                    last[p.0][p.1] = curr
+                }
             }
-            
-            
             
         }
-        
+        return []
     }
     
     func updateMove(i: Int, j: Int) {
@@ -262,11 +370,16 @@ class Board : Entity {
             
             
             let encoder = JSONEncoder()
-            request1.httpBody = try? encoder.encode(self.shortestPath(s: (i,j), t: (x,y)))
+//            request1.httpBody = try? encoder.encode(["moves": self.shortestPath(s: (i,j), t: (x,y))])
+            request1.httpBody = try? JSONSerialization.data(withJSONObject: ["playerid": self.playerid, "moves": self.shortestPath(s: (i,j), t: (x,y))])
+
             
             
             print(self.shortestPath(s: (i,j), t: (x,y)))
             print(request1.httpBody)
+            
+            request1.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request1.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
             
 
             request1.httpMethod = "POST"

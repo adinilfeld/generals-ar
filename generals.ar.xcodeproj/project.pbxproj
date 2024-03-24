@@ -14,6 +14,9 @@
 		326CFC092BAF3BEC00968455 /* generals_arTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC082BAF3BEC00968455 /* generals_arTests.swift */; };
 		326CFC132BAF3BEC00968455 /* generals_arUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC122BAF3BEC00968455 /* generals_arUITests.swift */; };
 		326CFC152BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */; };
+		327253FB2BAFCDAE00546FE6 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 327253FA2BAFCDAE00546FE6 /* DequeModule */; };
+		32D218A52BAFD7FF00BCBD97 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 32D218A42BAFD7FF00BCBD97 /* Alamofire */; };
+		32D218A72BAFD7FF00BCBD97 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 32D218A62BAFD7FF00BCBD97 /* AlamofireDynamic */; };
 		5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */; };
 		5AC30F742BAF8F7B00530B68 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F732BAF8F7B00530B68 /* Game.swift */; };
 /* End PBXBuildFile section */
@@ -35,6 +38,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		32D218A92BAFD8E800BCBD97 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		326CFBF42BAF3BE800968455 /* generals.ar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = generals.ar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		326CFBF72BAF3BE800968455 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				327253FB2BAFCDAE00546FE6 /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +79,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32D218A52BAFD7FF00BCBD97 /* Alamofire in Frameworks */,
+				32D218A72BAFD7FF00BCBD97 /* AlamofireDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,12 +162,16 @@
 				326CFBF02BAF3BE800968455 /* Sources */,
 				326CFBF12BAF3BE800968455 /* Frameworks */,
 				326CFBF22BAF3BE800968455 /* Resources */,
+				32D218A92BAFD8E800BCBD97 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = generals.ar;
+			packageProductDependencies = (
+				327253FA2BAFCDAE00546FE6 /* DequeModule */,
+			);
 			productName = generals.ar;
 			productReference = 326CFBF42BAF3BE800968455 /* generals.ar.app */;
 			productType = "com.apple.product-type.application";
@@ -167,6 +190,10 @@
 				326CFC062BAF3BEC00968455 /* PBXTargetDependency */,
 			);
 			name = generals.arTests;
+			packageProductDependencies = (
+				32D218A42BAFD7FF00BCBD97 /* Alamofire */,
+				32D218A62BAFD7FF00BCBD97 /* AlamofireDynamic */,
+			);
 			productName = generals.arTests;
 			productReference = 326CFC042BAF3BEC00968455 /* generals.arTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -221,6 +248,10 @@
 				Base,
 			);
 			mainGroup = 326CFBEB2BAF3BE800968455;
+			packageReferences = (
+				327253F92BAFCDAE00546FE6 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				327253FC2BAFD61200546FE6 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 326CFBF52BAF3BE800968455 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -445,7 +476,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlkjljk";
+				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlkjljka";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -476,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlkjljk";
+				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlkjljka";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -596,6 +627,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		327253F92BAFCDAE00546FE6 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+		327253FC2BAFD61200546FE6 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		327253FA2BAFCDAE00546FE6 /* DequeModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 327253F92BAFCDAE00546FE6 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = DequeModule;
+		};
+		32D218A42BAFD7FF00BCBD97 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 327253FC2BAFD61200546FE6 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		32D218A62BAFD7FF00BCBD97 /* AlamofireDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 327253FC2BAFD61200546FE6 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = AlamofireDynamic;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 326CFBEC2BAF3BE800968455 /* Project object */;
 }

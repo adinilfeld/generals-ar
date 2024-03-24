@@ -8,6 +8,31 @@
 import UIKit
 import SwiftUI
 
+class CustomUIHostingController<Content> : UIHostingController<Content> where Content: View {
+    var timer: Timer?
+    var board: Board
+    
+    required init(rootView: Content, board: Board) {
+        self.board = board
+        super.init(rootView: rootView)
+    }
+    
+    // NOTE: NEVER USE THIS INIT METHOD
+    required init?(coder: NSCoder) {
+        self.board = Board()
+        super.init(coder: coder)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: {_ in self.update()})
+    }
+    
+    func update() {
+        self.board.updateBoard()
+    }
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,11 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
+        let board = Board()
+        let contentView = ContentView(board: board)
 
         // Use a UIHostingController as window root view controller.
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = UIHostingController(rootView: contentView)
+        window.rootViewController = CustomUIHostingController(rootView: contentView, board: board)
+//        window.rootViewController = CustomUIHostingController(rootView: contentView)
         self.window = window
         window.makeKeyAndVisible()
         return true
