@@ -28,16 +28,17 @@ enum Direction {
 
 func getNumModel(num : Int) -> Entity {
     let e = ModelEntity(mesh: .generateText(String(num), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.02), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [blackMaterial])
-    e.transform.rotation = simd_quatf(angle: -.pi / 2, axis: [-1,0,0])
-//    e.transform.translation.y = -tileWidth / 4
+    e.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1,0,0])
     return e
 }
 
 let tileWidth : Float = 0.05
+let gapSize : Float = 0.02 // The percent of the tile width that should be margin (not colored)
 
 let redMaterial = SimpleMaterial(color: .red, isMetallic: false)
 let blueMaterial = SimpleMaterial(color: .blue, isMetallic: false)
 let grayMaterial = SimpleMaterial(color: .gray, isMetallic: false)
+let whiteMaterial = SimpleMaterial(color: .white, isMetallic: false)
 let blackMaterial = SimpleMaterial(color: .black, isMetallic: false)
 let redTowerMaterial = SimpleMaterial(color: .red, isMetallic: true)
 let blueTowerMaterial = SimpleMaterial(color: .blue, isMetallic: true)
@@ -49,13 +50,16 @@ class Tile: Entity, HasModel, HasCollision {
     var direction: Direction?
     var i : Int = 0
     var j : Int = 0
+    var selected: Bool
     
     required init() {
         self.color = Color.gray
+        self.selected = false
         super.init()
         
-        self.model = ModelComponent(mesh: .generatePlane(width: tileWidth, depth: tileWidth), materials: [grayMaterial])
+        self.model = ModelComponent(mesh: .generatePlane(width: (1-gapSize) * tileWidth, depth: (1-gapSize) * tileWidth), materials: [grayMaterial])
         self.generateCollisionShapes(recursive: true)
+        self.setColor(color: self.color)
     }
     
     func setColor(color: Color) {
@@ -74,6 +78,16 @@ class Tile: Entity, HasModel, HasCollision {
         print(dir)
         // TODO
     }
+    
+    func setSelected(setSelected: Bool) {
+        if setSelected && !self.selected {
+            self.transform.scale *= 0.8
+            self.selected = true
+        } else if !setSelected && self.selected {
+            self.transform.scale /= 0.8
+            self.selected = false
+        }
+    }
 }
 
 class MountainTile: Tile {
@@ -91,6 +105,7 @@ class TowerTile: Tile {
         
         self.addChild(getNumModel(num: self.troopCount))
         self.setTroopCount(newCount: 0)
+        self.setColor(color: self.color)
     }
     
     override func setColor(color: Color) {
@@ -111,7 +126,7 @@ class TowerTile: Tile {
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
         textEntity.transform.translation.x -= tileWidth / 4;
-        textEntity.transform.translation.z -= tileWidth / 4;
+        textEntity.transform.translation.z += tileWidth / 4;
     }
 }
 
@@ -132,7 +147,7 @@ class OpenTile: Tile {
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
         textEntity.transform.translation.x -= tileWidth / 4;
-        textEntity.transform.translation.z -= tileWidth / 4;
+        textEntity.transform.translation.z += tileWidth / 4;
     }
 }
 
@@ -261,7 +276,7 @@ class Board : Entity {
             var i = 0
             for row in board {
                 var tile_row: [Tile] = []
-                var j = 0
+                let j = 0
                 for square in row {
                     var color = Color.gray
                     let c = square.0
@@ -371,7 +386,6 @@ class Board : Entity {
             }
             self.board.append(row)
         }
-
     }
     
     func shortestPath(s: (Int, Int), t: (Int,Int)) -> [[Int]] {
@@ -442,7 +456,15 @@ class Board : Entity {
     }
     
     func updateMove(i: Int, j: Int) {
+        // Check if a fromTile had already been selected;
+        // if so, we make a new move and send it to the backend.
         if let (x,y) = self.fromTile {
+            // Edge case: user taps same square twice.
+            // We ignore the second tap.
+            if x == i && y == j {
+                return
+            }
+            self.board[x][y].setSelected(setSelected: false)
             self.fromTile = nil
             let url: URL = URL(string: serverURL + "/move")!
             var request1: URLRequest = URLRequest(url: url)
@@ -475,8 +497,12 @@ class Board : Entity {
                 }
             })
             
-        } else {
+        } else if self.board[i][j] is OpenTile || self.board[i][j] is TowerTile {
+            // Don't set the tile as selected if it's a mountain.
+            // Right now, the player is able to select a tile not owned by them.
+            // however, when the second tile is selected, the backend will reject the move, so it all works out.
             self.fromTile = (i,j)
+            self.board[i][j].setSelected(setSelected: true)
             return
         }
         
