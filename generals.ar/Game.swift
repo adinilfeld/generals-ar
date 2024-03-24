@@ -136,6 +136,10 @@ class OpenTile: Tile {
     }
 }
 
+struct ResponseData : Decodable {
+    var board: [[String]]
+}
+
 let serverURL = "http://10.150.83.102:8000"
 
 class Board : Entity {
@@ -147,6 +151,7 @@ class Board : Entity {
     required init() {
         self.playerid = Int.random(in: 1..<2_000_000_000)
         super.init()
+        self.defaultBoard()
         self.updateBoard()
      
     }
@@ -167,73 +172,128 @@ class Board : Entity {
         request1.httpMethod = "GET"
         let queue:OperationQueue = OperationQueue()
 
-//        let encoder = JSONEncoder()
-//        request1.httpBody = try? encoder.encode(["playerid": self.playerid])
-//        request1.httpBody = try? JSONSerialization.data(withJSONObject: ["playerid": self.playerid])
+        let encoder = JSONEncoder()
+        request1.httpBody = try? encoder.encode(["playerid": self.playerid])
+        request1.httpBody = try? JSONSerialization.data(withJSONObject: ["playerid": self.playerid])
     
         print("HERE")
         
         // TODO: remove this and uncomment below
-        if board.count == 0 {
-            self.defaultBoard()
-        } else {
-            print(board.count)
-        }
+//        if board.count == 0 {
+//            self.defaultBoard()
+//        } else {
+//            print(board.count)
+//        }
+//        self.updateBoardFromJson_(board: DefaultBoard)
 
-//        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
-//            if data != nil {
-//                do {
-//                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-////                        print("ASynchronous\(jsonResult)")
-//                        // TODO: read input and adjust
-//                        print("GOT RESULT")
-//                        self.updateBoardFromJson(data: jsonResult)
-//                    }
-//                } catch let error as NSError {
-//                    print(error.localizedDescription)
-//                }
-//            } else {
-//                print("NO DATA RECEIVED")
-//            }
-//        })
+        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
+            if data != nil {
+                do {
+                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
+//                        print("ASynchronous\(jsonResult)")
+                        // TODO: read input and adjust
+                        print("GOT RESULT")
+                        self.updateBoardFromJson(data: jsonResult)
+                    }
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else {
+                print("NO DATA RECEIVED")
+            }
+        })
     }
     
     func updateBoardFromJson(data: NSDictionary) {
+        var board_out: [[(Int, String, Int)]] = []
+        let board_data = data["board"]!
+        if let board_data = board_data as? [[[AnyObject]]] {
+            // Iterate through the key-value pairs of the dictionary
+//            for (key, board) in data {
+//                print("Key: \(key)")
+
+                // Iterate through the inner array
+            for r in board_data {
+                var row: [(Int, String, Int)] = []
+                for col in r {
+                    var s: String = ""
+                    var m: Int = 0
+                    var n: Int = 0
+                    var first = false
+                    
+                    for element in col {
+                        if let stringElement = element as? String {
+                            s = stringElement
+                        } else if let intElement = element as? Int {
+                            if first {
+                                m = intElement
+                                first = false
+                            } else {
+                                n = intElement
+                            }
+                        } else if let doubleElement = element as? Double {
+                        } else {
+                            print(element)
+                            print(col)
+                        }
+                        row.append((m,s,n))
+                        //                      print("ADD TO ROW")
+                    }
+                    board_out.append(row)
+                }
+                
+            }
+        } else {
+            print("Error: The data is not in the expected format.")
+            print(board_data)
+        }
+        
+        self.updateBoardFromJson_(board: board_out)
+    }
+    
+    func updateBoardFromJson_(board: [[(Int, String, Int)]]) {
         print("READING BOARD")
-        let board = data["board"]!
+//        let board = data["board"]!
         let init_board: Bool = self.board.count == 0
-        if let board = board as? [[(Int, String, Int)]] {
+        print(self.board.count)
+//        print(type(of:board))
+//        if let board = board as? [[(Any, String, Int)]] {
             var i = 0
             for row in board {
                 var tile_row: [Tile] = []
                 var j = 0
                 for square in row {
                     var color = Color.gray
-                    if square.0 == 1 {
-                        color = Color.blue
-                    } else if square.0 == 2 {
-                        color = Color.red
-                    }
+                    let c = square.0
+                    if c == 1 { color = Color.blue}
+                    if c == 2 { color = Color.red }
+                    
+//                    var color = Color.gray
+//                    if square.0 == 1 {
+//                        color = Color.blue
+//                    } else if square.0 == 2 {
+//                        color = Color.red
+//                    }
                     if square.1 == "⛰" {
                         if init_board {
-                            var t = MountainTile()
-                            t.i = i
-                            t.j = j
-                            t.setColor(color: color)
-                            tile_row.append(t)
-                            self.addChild(t)
-                            print("ADDED CHILD")
+//                            let t = MountainTile()
+//                            t.i = i
+//                            t.j = j
+//                            t.setColor(color: color)
+//                            tile_row.append(t)
+//                            self.addChild(t)
+//                            print("ADDED CHILD")
                         }
-                    } else if square.1 == "⌂" {
+                    } else if square.1 == "⌂" || square.1 == "♔" {
                         if init_board {
-                            var t = TowerTile()
-                            t.i = i
-                            t.j = j
-                            t.setColor(color: color)
-                            t.setTroopCount(newCount: square.2)
-                            tile_row.append(t)
-                            self.addChild(t)
-                            print("ADDED CHILD")
+//                            let t = TowerTile()
+//                            t.i = i
+//                            t.j = j
+//                            t.setColor(color: color)
+//                            t.setTroopCount(newCount: square.2)
+//                            tile_row.append(t)
+//                            self.addChild(t)
+//                            print("ADDED CHILD")
                         } else {
                             if let t = self.board[i][j] as? TowerTile {
                                 t.setColor(color: color)
@@ -242,7 +302,8 @@ class Board : Entity {
                         }
                     } else if square.1 == "-" {
                         if init_board {
-                            var t = TowerTile()
+                            print("ADDING TILE")
+                            let t = OpenTile()
                             t.i = i
                             t.j = j
                             t.setColor(color: color)
@@ -258,37 +319,55 @@ class Board : Entity {
 //                            var t : TowerTile = self.board[i][j]
                         }
                     }
+                    j += 1
                 }
                 self.board.append(tile_row)
+                i += 1
             }
-        } else {
-            print("ERROR")
-//            print(board)
-        }
     }
     
     func defaultBoard() {
-        let n = 7
-        let m = 7
+        let n = 10
+        let m = 10
         for i in 0..<m {
             var row: [Tile] = []
             for j in 0..<n {
-                var color = Color.red
-                if (i + j) % 2 == 0 {
-                    color = Color.blue
+                func getTower(n: Int, color: Color) -> Tile {
+                    let tile: TowerTile = TowerTile()
+                    tile.setTroopCount(newCount: n)
+                    tile.setColor(color: color)
+                    
+                    return tile
                 }
-                let tile = OpenTile()
+                func getOpen(n: Int) -> Tile {
+                    let tile: OpenTile = OpenTile()
+                    tile.setTroopCount(newCount: n)
+                    
+                    return tile
+                }
+                let tile: Tile
+                if (i == 2 && j == 2) {
+                    tile = getTower(n: 30, color: .blue)
+                } else if (i == 7 && j == 7) {
+                    tile = getTower(n: 30, color: .red)
+//                } else if (i == 3 && j == 4) {
+//                    tile = MountainTile()
+                } else {
+                    tile = getOpen(n: 0)
+                }
                 tile.i = i
                 tile.j = j
-                tile.setColor(color: color)
-                
-                
                 // Offset tile to create grid
                 tile.transform.translation.x = tileWidth * Float(m / 2 - i)
                 tile.transform.translation.z = tileWidth * Float(n / 2 - j)
                 
                 self.addChild(tile)
                 row.append(tile)
+
+
+                
+                
+                
             }
             self.board.append(row)
         }
@@ -404,3 +483,529 @@ class Board : Entity {
     }
     
 }
+
+
+//let DefaultBoard: [[(Int, String, Int)]] = [
+//    "board": [
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                1,
+//                "♛",
+//                1
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                2,
+//                "♛",
+//                1
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ],
+//        [
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⛰",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ],
+//            [
+//                -1,
+//                "⌂",
+//                20
+//            ],
+//            [
+//                -1,
+//                "-",
+//                0
+//            ]
+//        ]
+//    ]
+//]
