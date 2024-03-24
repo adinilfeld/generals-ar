@@ -473,7 +473,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"generals.ar/Preview Content\"";
-				DEVELOPMENT_TEAM = HD5DXW33VS;
+				DEVELOPMENT_TEAM = 662MWA8886;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -488,7 +488,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlsdgfasdfkjljka";
+				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlsddgfdfdfasdfkjljka";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -504,7 +504,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"generals.ar/Preview Content\"";
-				DEVELOPMENT_TEAM = HD5DXW33VS;
+				DEVELOPMENT_TEAM = 662MWA8886;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -519,7 +519,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlsdgfasdfkjljka";
+				PRODUCT_BUNDLE_IDENTIFIER = "generals-ar.khlsddgfdfdfasdfkjljka";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

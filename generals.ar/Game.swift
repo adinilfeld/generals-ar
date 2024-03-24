@@ -291,13 +291,13 @@ class Board : Entity {
                 // Iterate through the inner array
             for r in board_data {
                 var row: [(Int, String, Int)] = []
-                for col in r {
+                for square in r {
                     var s: String = ""
                     var m: Int = 0
                     var n: Int = 0
                     var first = false
                     
-                    for element in col {
+                    for element in square {
                         if let stringElement = element as? String {
                             s = stringElement
                         } else if let intElement = element as? Int {
@@ -310,13 +310,12 @@ class Board : Entity {
                         } else if let doubleElement = element as? Double {
                         } else {
                             print(element)
-                            print(col)
+                            print(square)
                         }
-                        row.append((m,s,n))
                     }
-                    board_out.append(row)
+                    row.append((m,s,n))
                 }
-                
+                board_out.append(row)
             }
         } else {
             print("Error: The data is not in the expected format.")
@@ -330,7 +329,7 @@ class Board : Entity {
         print("READING BOARD")
 //        let board = data["board"]!
         let init_board: Bool = self.board.count == 0
-        print(self.board.count)
+        print("board rows", self.board.count, "init board", init_board)
 //        print(type(of:board))
 //        if let board = board as? [[(Any, String, Int)]] {
             var i = 0
@@ -396,7 +395,9 @@ class Board : Entity {
                     }
                     j += 1
                 }
-                self.board.append(tile_row)
+                if init_board{
+                    self.board.append(tile_row)
+                }
                 i += 1
             }
     }
