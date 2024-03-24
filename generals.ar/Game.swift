@@ -331,6 +331,13 @@ class Board : Entity {
         return board_out
     }
     
+    // TODO: have to hook this function up to updateBoardFromJson (to use the move list returned by server)
+    func setArrows(moveQueue: [(Tile, Direction)]) {
+        for (tile, dir) in moveQueue {
+            tile.setDirection(dir: dir)
+        }
+    }
+    
     func updateBoardFromJson(data: NSDictionary) {
         var board_out: [[(Int, String, Int)]] = []
         let board_data = data["board"]!
@@ -641,6 +648,9 @@ class Board : Entity {
         
     }
     
+    func resetBoard() {
+        // TODO: send a restart request to the server
+    }
 }
 
 //let DefaultBoard: [[(Int, String, Int)]] = [

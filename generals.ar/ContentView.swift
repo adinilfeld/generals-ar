@@ -33,9 +33,15 @@ struct ARViewContainer: UIViewRepresentable {
         
         let anchor = AnchorEntity(.plane(.horizontal, classification: .any, minimumBounds: SIMD2<Float>(0.2, 0.2)))
         
+//        var button = UIButton()
+//        button.setTitle("Reset", for: .normal)
+        
         arView.board = board
         
         anchor.children.append(board)
+        
+        // Add reset button
+        
 
         // Add the horizontal plane anchor to the scene
         arView.scene.anchors.append(anchor)
