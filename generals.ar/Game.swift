@@ -375,7 +375,8 @@ class Board : Entity {
     }
     
     func updateMove(i: Int, j: Int) {
-        // TODO: check that it's a valid tile (has to be owned by player)
+        // Check if a fromTile had already been selected;
+        // if so, we make a new move and send it to the backend.
         if let (x,y) = self.fromTile {
             // Edge case: user taps same square twice.
             // We ignore the second tap.
@@ -415,7 +416,10 @@ class Board : Entity {
                 }
             })
             
-        } else {
+        } else if self.board[i][j] is OpenTile || self.board[i][j] is TowerTile {
+            // Don't set the tile as selected if it's a mountain.
+            // Right now, the player is able to select a tile not owned by them.
+            // however, when the second tile is selected, the backend will reject the move, so it all works out.
             self.fromTile = (i,j)
             self.board[i][j].setSelected(setSelected: true)
             return
