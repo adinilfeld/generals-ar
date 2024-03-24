@@ -400,6 +400,9 @@ class Board : Entity {
                 for square in row {
                     var color = Color.gray
                     let c = square.0
+                    if c != -1 {
+                        print("color: ", c)
+                    }
                     if c == 1 { color = Color.blue}
                     if c == 2 { color = Color.red }
                     

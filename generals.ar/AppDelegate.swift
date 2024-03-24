@@ -25,7 +25,7 @@ class CustomUIHostingController<Content> : UIHostingController<Content> where Co
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: {_ in self.update()})
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: {_ in self.update()})
     }
     
     func update() {
