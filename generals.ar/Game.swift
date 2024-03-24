@@ -29,6 +29,7 @@ enum Direction {
 func getNumModel(num : Int) -> Entity {
     let e = ModelEntity(mesh: .generateText(String(num), extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.02), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [blackMaterial])
     e.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1,0,0])
+    e.name = "nummodel"
     return e
 }
 
@@ -62,6 +63,8 @@ class Tile: Entity, HasModel, HasCollision {
         self.model = ModelComponent(mesh: .generatePlane(width: (1-gapSize) * tileWidth, depth: (1-gapSize) * tileWidth), materials: [grayMaterial])
         self.generateCollisionShapes(recursive: true)
         self.setColor(color: self.color)
+        
+        setDirection(dir: Direction.down)
     }
     
     func setColor(color: Color) {
@@ -77,8 +80,35 @@ class Tile: Entity, HasModel, HasCollision {
     }
     
     func setDirection(dir: Direction?) {
-        print(dir)
-        // TODO: implement
+        if let unwrappedDir = dir {
+            var arrow : String
+            var rightOffset : Float
+            var upOffset : Float
+            switch unwrappedDir {
+            case Direction.up:
+                arrow = "↑"
+                rightOffset = -0.008
+                upOffset = 0.012
+            case Direction.right:
+                arrow = "→"
+                rightOffset = 0.015
+                upOffset = -0.01
+            case Direction.down:
+                arrow = "↓"
+                rightOffset = -0.008
+                upOffset = -0.036
+            case Direction.left:
+                arrow = "←";
+                rightOffset = -0.035
+                upOffset = -0.01
+            }
+            
+            let arrowEntity = ModelEntity(mesh: .generateText(arrow, extrusionDepth: 0.005, font: .boldSystemFont(ofSize: 0.02), containerFrame: .zero, alignment: .center, lineBreakMode: .byWordWrapping), materials: [blackMaterial])
+            arrowEntity.transform.rotation = simd_quatf(angle: .pi / 2, axis: [-1,0,0])
+            arrowEntity.transform.translation.x += rightOffset
+            arrowEntity.transform.translation.z -= upOffset
+            self.addChild(arrowEntity)
+        }
     }
     
     func setSelected(setSelected: Bool) {
@@ -145,7 +175,11 @@ class TowerTile: Tile {
 
     func setTroopCount(newCount : Int) {
         self.troopCount = newCount
-        self.removeChild(self.children[0])
+        if let oldNumber = findEntity(named: "nummodel") {
+            self.removeChild(oldNumber)
+        } else {
+            print("failed to identify old number")
+        }
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
         textEntity.transform.translation.x -= getTextWidth(text: textEntity) / 2;
@@ -166,7 +200,11 @@ class OpenTile: Tile {
     
     func setTroopCount(newCount : Int) {
         self.troopCount = newCount
-        self.removeChild(self.children[0])
+        if let oldNumber = findEntity(named: "nummodel") {
+            self.removeChild(oldNumber)
+        } else {
+            print("failed to identify old number")
+        }
         let textEntity = getNumModel(num: self.troopCount)
         self.addChild(textEntity)
         textEntity.transform.translation.x -= getTextWidth(text: textEntity) / 2;
@@ -217,29 +255,29 @@ class Board : Entity {
         print("HERE")
         
         // TODO: remove this and uncomment below
-//        if board.count == 0 {
-//            self.defaultBoard()
-//        } else {
-//            print(board.count)
-//        }
+        if board.count == 0 {
+            self.defaultBoard()
+        } else {
+            print(board.count)
+        }
 //        self.updateBoardFromJson_(board: DefaultBoard)
 
-        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
-            if data != nil {
-                do {
-                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-//                        print("ASynchronous\(jsonResult)")
-                        // TODO: read input and adjust
-                        print("GOT RESULT")
-                        self.updateBoardFromJson(data: jsonResult)
-                    }
-                } catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-            } else {
-                print("NO DATA RECEIVED")
-            }
-        })
+//        NSURLConnection.sendAsynchronousRequest(request1, queue: queue, completionHandler:{ (response: URLResponse?, data: Data?, error: Error?) -> Void in
+//            if data != nil {
+//                do {
+//                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
+////                        print("ASynchronous\(jsonResult)")
+//                        // TODO: read input and adjust
+//                        print("GOT RESULT")
+//                        self.updateBoardFromJson(data: jsonResult)
+//                    }
+//                } catch let error as NSError {
+//                    print(error.localizedDescription)
+//                }
+//            } else {
+//                print("NO DATA RECEIVED")
+//            }
+//        })
     }
     
     func updateBoardFromJson(data: NSDictionary) {
@@ -275,7 +313,6 @@ class Board : Entity {
                             print(col)
                         }
                         row.append((m,s,n))
-                        //                      print("ADD TO ROW")
                     }
                     board_out.append(row)
                 }
@@ -390,6 +427,8 @@ class Board : Entity {
                     tile = getTower(n: 30, color: .red)
 //                } else if (i == 3 && j == 4) {
 //                    tile = MountainTile()
+                } else if (i == j) {
+                  tile = MountainTile()
                 } else {
                     tile = getOpen(n: 0)
                 }
@@ -401,11 +440,6 @@ class Board : Entity {
                 
                 self.addChild(tile)
                 row.append(tile)
-
-
-                
-                
-                
             }
             self.board.append(row)
         }
