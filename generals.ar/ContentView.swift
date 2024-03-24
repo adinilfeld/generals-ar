@@ -8,6 +8,17 @@
 import SwiftUI
 import RealityKit
 
+class Button3D : Entity, HasModel, HasCollision {
+    required init() {
+        super.init()
+        
+        self.model = ModelComponent(mesh: .generatePlane(width: (1-gapSize) * tileWidth, depth: (1-gapSize) * tileWidth), materials: [redMaterial])
+        self.numModel = getNumModel(num: <#T##Int#>)
+        self.generateCollisionShapes(recursive: true)
+    }
+
+}
+
 struct ContentView : View {
     var board: Board
     
@@ -33,9 +44,15 @@ struct ARViewContainer: UIViewRepresentable {
         
         let anchor = AnchorEntity(.plane(.horizontal, classification: .any, minimumBounds: SIMD2<Float>(0.2, 0.2)))
         
+//        var button = UIButton()
+//        button.setTitle("Reset", for: .normal)
+        
         arView.board = board
         
         anchor.children.append(board)
+        
+        // Add reset button
+        
 
         // Add the horizontal plane anchor to the scene
         arView.scene.anchors.append(anchor)
