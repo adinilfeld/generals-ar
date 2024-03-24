@@ -15,7 +15,6 @@
 		326CFC132BAF3BEC00968455 /* generals_arUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC122BAF3BEC00968455 /* generals_arUITests.swift */; };
 		326CFC152BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */; };
 		5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */; };
-		5AC30F722BAF7E8200530B68 /* TappableEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F712BAF7E8200530B68 /* TappableEntity.swift */; };
 		5AC30F742BAF8F7B00530B68 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC30F732BAF8F7B00530B68 /* Game.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +47,6 @@
 		326CFC122BAF3BEC00968455 /* generals_arUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generals_arUITests.swift; sourceTree = "<group>"; };
 		326CFC142BAF3BEC00968455 /* generals_arUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = generals_arUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDetectorARView.swift; sourceTree = "<group>"; };
-		5AC30F712BAF7E8200530B68 /* TappableEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableEntity.swift; sourceTree = "<group>"; };
 		5AC30F732BAF8F7B00530B68 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +103,6 @@
 				326CFBFB2BAF3BEB00968455 /* Assets.xcassets */,
 				326CFBFD2BAF3BEB00968455 /* Preview Content */,
 				5AC30F6F2BAF7BBE00530B68 /* TapDetectorARView.swift */,
-				5AC30F712BAF7E8200530B68 /* TappableEntity.swift */,
 				5AC30F732BAF8F7B00530B68 /* Game.swift */,
 			);
 			path = generals.ar;
@@ -269,7 +266,6 @@
 				326CFBFA2BAF3BE800968455 /* ContentView.swift in Sources */,
 				5AC30F742BAF8F7B00530B68 /* Game.swift in Sources */,
 				326CFBF82BAF3BE800968455 /* AppDelegate.swift in Sources */,
-				5AC30F722BAF7E8200530B68 /* TappableEntity.swift in Sources */,
 				5AC30F702BAF7BBE00530B68 /* TapDetectorARView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
