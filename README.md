@@ -18,10 +18,10 @@ Note that the device running the server must be on the same network as the devic
      ```
      let serverURL = "http://192.168.1.10:8000"
      ```
-5. Connect your device (iPhone or iPad) with a physical cable and wait for it to appear in XCode
-6. Click the Build button (looks like a "play" button)
-7. If needed, follow any prompts to (a) enable Developer Mode, and (b) trust the Developer App certificate; afterwards, build again
-8. Follow instructions 3-5 to install the app on a second device.
+4. Connect your device (iPhone or iPad) with a physical cable and wait for it to appear in XCode
+5. Click the Build button (looks like a "play" button)
+6. If needed, follow any prompts to (a) enable Developer Mode, and (b) trust the Developer App certificate; afterwards, build again
+7. Follow instructions 4-6 to install the app on a second device. (You can unplug the first device once the game is installed.)
 
 Notes:
 - The device(s) running the app must be running iOS/iPadOS 17.4 or higher.
