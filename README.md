@@ -20,7 +20,7 @@ Note that the device running the server must be on the same network as the devic
 
 ## Play the game! ##
 To start a new game: 
-1. Close the server
+1. Close the server (Ctrl+z)
 2. Close all installed apps
 3. Restart the server
 4. Re-open the apps
