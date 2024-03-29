@@ -16,7 +16,7 @@ Note that the device running the server must be on the same network as the devic
 
 1. Clone the [generals-ar-server](https://github.com/adinilfeld/generals-ar-server) repo.
 2. If needed, install uvicorn (for example, by running `pip install uvicorn`)
-3. From the top level of the server repo, run `uvicorn app:app --host 0000 --port 8000`
+3. From the top level of the server repo, run `uvicorn app:app --host 0.0.0.0 --port 8000`
 
 ## Play the game! ##
 To start a new game: 
