@@ -10,8 +10,6 @@ Note that the device running the server must be on the same network as the devic
 
 
 ## Install the app ##
-Note that the device(s) running the app must be running iOS/iPadOS 17.4 or higher.
-
 1. Clone this repo.
 2. Open the top-level `generals.ar.xcodeproj` file in XCode
 3. On line 219 of Game.swift, modify the IP address to use the local address of your device running the server (keeping port 8000). Please don't commit this change!
@@ -24,6 +22,11 @@ Note that the device(s) running the app must be running iOS/iPadOS 17.4 or highe
 6. Click the Build button (looks like a "play" button)
 7. If needed, follow any prompts to (a) enable Developer Mode, and (b) trust the Developer App certificate; afterwards, build again
 8. Follow instructions 3-5 to install the app on a second device.
+
+Notes:
+- The device(s) running the app must be running iOS/iPadOS 17.4 or higher.
+- The server cannot handle more than 2 devices at the same time.
+
 
 ## Play the game! ##
 To reset the game: 
