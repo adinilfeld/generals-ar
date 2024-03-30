@@ -31,7 +31,7 @@ Notes:
 ## Play the game! ##
 To reset the game: 
 1. Close the server (CTRL+C, then CTRL+Z)
-2. Close all installed apps
+2. Close the app on the device(s)
 3. Restart the server
 4. Re-open the apps
 
