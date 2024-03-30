@@ -1,4 +1,4 @@
-Welcome to generals.ar, a two-player AR implementation of the popular online game [generals.io](generals.io) for iOS. Created during the Uncommon Hacks 2024 hackathon.
+Welcome to generals.ar, a two-player, iOS, AR-based implementation of the popular online game [generals.io](generals.io). Created during the Uncommon Hacks 2024 hackathon.
 
 # How to play #
 ## Start the server ##
